@@ -1,0 +1,8 @@
+package com.andersenlab.payment.service;
+
+import com.andersenlab.payment.domain.Payment;
+
+public interface PaymentService {
+
+    Payment execute(Payment payment);
+}
