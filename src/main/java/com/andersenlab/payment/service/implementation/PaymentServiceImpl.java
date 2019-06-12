@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.andersenlab.payment.dao.AccountDao;
-import com.andersenlab.payment.dao.WalletDao;
 import com.andersenlab.payment.domain.Account;
 import com.andersenlab.payment.domain.Payment;
 import com.andersenlab.payment.domain.Payment.ExecutionStatus;
@@ -26,12 +25,10 @@ import com.andersenlab.payment.service.exception.PaymentExecutionException;
 public class PaymentServiceImpl implements PaymentService {
 
     private AccountDao accountDao;
-    private WalletDao walletDao;
 
     @Autowired
-    public PaymentServiceImpl(AccountDao accountDao, WalletDao walletDao) {
+    public PaymentServiceImpl(AccountDao accountDao) {
         this.accountDao = accountDao;
-        this.walletDao = walletDao;
     }
 
     @Override
@@ -87,11 +84,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     private void withdraw(Wallet wallet, BigDecimal withdrawAmount) {
         BigDecimal balance = wallet.getAmount();
-        System.out.println("balance : " + balance + " " + wallet.getCurrency());
         balance = balance.subtract(withdrawAmount);
-        System.out.println("after withdraw : " + balance + " " + wallet.getCurrency());
         wallet.setAmount(balance);
-        System.out.println("updated wallet : " + wallet);
     }
 
     private void registerExecutionEnd(Payment payment) {
