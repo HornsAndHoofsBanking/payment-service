@@ -3,6 +3,7 @@ package com.andersenlab.payment.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,8 +20,9 @@ public class PaymentController {
     @Autowired
     PaymentService paymentService;
 
-    @PostMapping("/{payment}")
-    public void transfer(@PathVariable Payment payment) {
+    @PostMapping("/{accountId}")
+    public void transfer(@PathVariable Long accountId, @RequestBody Payment payment) {
+        payment.setAccountId(accountId);
         Payment executed = paymentService.execute(payment);
         statisticsService.sendReport(executed);
     }

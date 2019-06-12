@@ -27,3 +27,29 @@ INSERT INTO user (id, username, password, email, enabled, account_non_expired, c
 INSERT INTO role_user (role_id, user_id) VALUES
     (1, 1),
     (2, 2);
+    
+    
+INSERT INTO account (user_id) VALUES
+     (1);
+     
+INSERT INTO wallet (acc_id, currency, amount) VALUES
+     (1, 'RUR', 100000),
+     (1, 'USD', 50000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

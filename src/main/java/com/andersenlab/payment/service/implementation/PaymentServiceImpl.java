@@ -6,7 +6,10 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.andersenlab.payment.dao.AccountDao;
 import com.andersenlab.payment.dao.WalletDao;
@@ -18,6 +21,8 @@ import com.andersenlab.payment.service.PaymentService;
 import com.andersenlab.payment.service.exception.NotEnoughFoundsException;
 import com.andersenlab.payment.service.exception.PaymentExecutionException;
 
+@Service
+@Transactional
 public class PaymentServiceImpl implements PaymentService {
 
     private AccountDao accountDao;
@@ -25,24 +30,22 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     public PaymentServiceImpl(AccountDao accountDao, WalletDao walletDao) {
-        super();
         this.accountDao = accountDao;
         this.walletDao = walletDao;
     }
 
     @Override
     public Payment execute(Payment payment) {
-
         registerExecutionStart(payment);
         try {
             Optional<Account> result = accountDao.findById(payment.getAccountId());
-
             Account account = result.get();
+
             BigDecimal withdrawAmount = payment.getAmount();
 
-            Wallet suitablePurse = checkFounds(account, withdrawAmount, payment.getCurrency());
+            Wallet suitableWallet = checkFounds(account, withdrawAmount, payment.getCurrency());
 
-            withdraw(suitablePurse, withdrawAmount);
+            withdraw(suitableWallet, withdrawAmount);
         } catch (Exception e) {
             payment.setExecutionStatus(ExecutionStatus.FAILED);
             throw new PaymentExecutionException("payment " + payment.getId() + " failed" + System.lineSeparator()
@@ -61,7 +64,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     private Wallet checkFounds(Account account, BigDecimal withdrawAmount, Currency currency) {
         Wallet suitableWallet = null;
-        for (Wallet wallet : account.getPurses()) {
+        for (Wallet wallet : account.getWallets()) {
             if (wallet.getCurrency().equals(currency)) {
                 suitableWallet = wallet;
                 break;
@@ -69,7 +72,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         if (suitableWallet == null) {
-            throw new NotEnoughFoundsException("There is no purse with specified currency.");
+            throw new NotEnoughFoundsException("There is no wallet with specified currency.");
         }
 
         BigDecimal balance = suitableWallet.getAmount();
@@ -84,14 +87,15 @@ public class PaymentServiceImpl implements PaymentService {
 
     private void withdraw(Wallet wallet, BigDecimal withdrawAmount) {
         BigDecimal balance = wallet.getAmount();
-        balance.subtract(withdrawAmount);
+        System.out.println("balance : " + balance + " " + wallet.getCurrency());
+        balance = balance.subtract(withdrawAmount);
+        System.out.println("after withdraw : " + balance + " " + wallet.getCurrency());
         wallet.setAmount(balance);
-        walletDao.update(wallet);
+        System.out.println("updated wallet : " + wallet);
     }
 
     private void registerExecutionEnd(Payment payment) {
         Timestamp now = new Timestamp(new Date().getTime());
         payment.setExecutionEnd(now);
     }
-
 }
