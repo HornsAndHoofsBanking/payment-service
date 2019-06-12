@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Currency;
 import java.util.Date;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,7 +35,9 @@ public class PaymentServiceImpl implements PaymentService {
 
         registerExecutionStart(payment);
         try {
-            Account account = accountDao.findById(payment.getAccountId());
+            Optional<Account> result = accountDao.findById(payment.getAccountId());
+
+            Account account = result.get();
             BigDecimal withdrawAmount = payment.getAmount();
 
             Wallet suitablePurse = checkFounds(account, withdrawAmount, payment.getCurrency());

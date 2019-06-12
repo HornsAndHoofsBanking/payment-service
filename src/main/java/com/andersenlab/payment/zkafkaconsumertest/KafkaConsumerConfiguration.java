@@ -38,5 +38,4 @@ public class KafkaConsumerConfiguration {
         factory.setConsumerFactory(consumerFactory(bootstrapServers, groupId));
         return factory;
     }
-
 }
