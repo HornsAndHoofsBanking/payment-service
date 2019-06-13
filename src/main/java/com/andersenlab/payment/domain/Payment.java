@@ -4,21 +4,41 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Currency;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.data.elasticsearch.annotations.Document;
+
+@Entity
+@Table(name = "payment")
+@Document(indexName = "payment")
 public class Payment {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name = "acc_id")
     private long accountId;
 
+    @Column(name = "currency")
     private Currency currency;
 
+    @Column(name = "amount")
     private BigDecimal amount;
 
+    @Column(name = "execution_start")
     private Timestamp executionStart;
 
+    @Column(name = "execution_end")
     private Timestamp executionEnd;
 
-    private ExecutionStatus executionStatus;
+    @Column(name = "execution_status")
+    private String executionStatus;
 
     public Payment() {
         super();
@@ -73,11 +93,11 @@ public class Payment {
     }
 
     public ExecutionStatus getExecutionStatus() {
-        return executionStatus;
+        return ExecutionStatus.valueOf(executionStatus); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
     public void setExecutionStatus(ExecutionStatus executionStatus) {
-        this.executionStatus = executionStatus;
+        this.executionStatus = executionStatus.toString(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
     public enum ExecutionStatus {

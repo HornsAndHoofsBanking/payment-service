@@ -19,6 +19,9 @@ CREATE TABLE `banking`.`transfer` (
   `id` BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
   `acc_id` BIGINT(20) NOT NULL,
   `currency` VARCHAR(255) NOT NULL,
+  `execution_start` TIMESTAMP,
+  `execution_end` TIMESTAMP,
+  `execution_status` VARCHAR(255),
   `amount` DECIMAL(21) NOT NULL);
   
 CREATE TABLE `banking`.`permission` (

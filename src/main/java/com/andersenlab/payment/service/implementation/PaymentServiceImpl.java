@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.andersenlab.payment.dao.AccountDao;
+import com.andersenlab.payment.dao.jpa.AccountDao;
 import com.andersenlab.payment.domain.Account;
 import com.andersenlab.payment.domain.Payment;
 import com.andersenlab.payment.domain.Payment.ExecutionStatus;

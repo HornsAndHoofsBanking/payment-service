@@ -1,4 +1,4 @@
-package com.andersenlab.payment.dao;
+package com.andersenlab.payment.dao.jpa;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

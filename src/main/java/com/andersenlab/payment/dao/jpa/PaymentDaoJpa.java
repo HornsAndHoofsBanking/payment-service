@@ -1,4 +1,4 @@
-package com.andersenlab.payment.dao;
+package com.andersenlab.payment.dao.jpa;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.andersenlab.payment.domain.Payment;
 
 @Repository
-public interface PaymentDao extends CrudRepository<Payment, Long> {
+public interface PaymentDaoJpa extends CrudRepository<Payment, Long> {
 
 }

@@ -16,8 +16,9 @@ public class StatisticsServiceImpl implements StatisticsService {
     private final String paymentStatisticsTopicName;
 
     @Autowired
-    public StatisticsServiceImpl(@Qualifier("paymentKafkaTemplate") KafkaTemplate<String, Payment> paymentKafkaTemplate,
-            @Value("${payment.kafka.payment-statistics.topic-name}") String paymentStatisticsTopicName) {
+    public StatisticsServiceImpl(
+                                 @Qualifier("paymentKafkaTemplate") KafkaTemplate<String, Payment> paymentKafkaTemplate,
+                                 @Value("${payment.kafka.payment-statistics.topic-name}") String paymentStatisticsTopicName) {
 
         this.paymentKafkaTemplate = paymentKafkaTemplate;
         this.paymentStatisticsTopicName = paymentStatisticsTopicName;
@@ -27,5 +28,4 @@ public class StatisticsServiceImpl implements StatisticsService {
     public void sendReport(Payment payment) {
         paymentKafkaTemplate.send(paymentStatisticsTopicName, payment);
     }
-
 }

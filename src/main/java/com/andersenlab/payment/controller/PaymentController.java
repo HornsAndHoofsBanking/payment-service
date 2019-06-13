@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.andersenlab.payment.domain.Payment;
+import com.andersenlab.payment.service.PaymentPersistenceService;
 import com.andersenlab.payment.service.PaymentService;
 import com.andersenlab.payment.service.StatisticsService;
 
@@ -19,11 +20,14 @@ public class PaymentController {
     private StatisticsService statisticsService;
     @Autowired
     PaymentService paymentService;
+    @Autowired
+    PaymentPersistenceService paymentPersistenceService;
 
     @PostMapping("/{accountId}")
     public void transfer(@PathVariable Long accountId, @RequestBody Payment payment) {
         payment.setAccountId(accountId);
         Payment executed = paymentService.execute(payment);
+        paymentPersistenceService.save(executed);
         statisticsService.sendReport(executed);
     }
 
