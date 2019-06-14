@@ -3,10 +3,10 @@ CREATE TABLE `banking`.`account` (
   `user_id` BIGINT(20) NOT NULL);
 
 CREATE TABLE `banking`.`wallet` (
+  `id` BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
   `acc_id` BIGINT(20) NOT NULL,
   `currency` VARCHAR(255) NOT NULL,
-  `amount` DECIMAL(21) ZEROFILL NOT NULL,
-  CONSTRAINT pk_founds_item PRIMARY KEY (acc_id, currency));
+  `amount` DECIMAL(21) ZEROFILL NOT NULL);
    
 CREATE TABLE `banking`.`transfer` (
   `id` BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
@@ -19,6 +19,9 @@ CREATE TABLE `banking`.`transfer` (
   `id` BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
   `acc_id` BIGINT(20) NOT NULL,
   `currency` VARCHAR(255) NOT NULL,
+  `execution_start` TIMESTAMP,
+  `execution_end` TIMESTAMP,
+  `execution_status` VARCHAR(255),
   `amount` DECIMAL(21) NOT NULL);
   
 CREATE TABLE `banking`.`permission` (
@@ -79,4 +82,8 @@ ALTER TABLE `banking`.`wallet`
   REFERENCES `banking`.`account` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+  
+ALTER TABLE `banking`.`wallet`
+  ADD UNIQUE `unique_index`(`acc_id`, `currency`);
+
   

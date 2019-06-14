@@ -2,13 +2,32 @@ package com.andersenlab.payment.domain;
 
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "account")
 public class Account {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name = "user_id")
     private long userId;
 
-    private List<Wallet> purses;
+    @OneToMany(fetch = FetchType.EAGER,
+               targetEntity = Wallet.class,
+               orphanRemoval = true)
+    @JoinColumn(name = "acc_id")
+    private List<Wallet> wallets;
 
     public Account() {
         super();
@@ -30,12 +49,12 @@ public class Account {
         this.userId = user;
     }
 
-    public List<Wallet> getPurses() {
-        return purses;
+    public List<Wallet> getWallets() {
+        return wallets;
     }
 
-    public void setPurses(List<Wallet> purses) {
-        this.purses = purses;
+    public void setWallets(List<Wallet> purses) {
+        this.wallets = purses;
     }
 
 }
