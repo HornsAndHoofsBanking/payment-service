@@ -49,8 +49,8 @@ public class PaymentServiceImpl implements PaymentService {
                     + "Caused by:" + System.lineSeparator() + e.getCause());
         } finally {
             registerExecutionEnd(payment);
-            return payment;
         }
+        return payment;
     }
 
     private void registerExecutionStart(Payment payment) {

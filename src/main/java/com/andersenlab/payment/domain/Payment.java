@@ -13,6 +13,13 @@ import javax.persistence.Table;
 
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description = "represents payment operation."
+        + " accountId - source account,"
+        + " amount - amount of money for withdraw,"
+        + " currency - international currency code")
 @Entity
 @Table(name = "payment")
 @Document(indexName = "payment")
@@ -20,6 +27,7 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(hidden = true)
     private long id;
 
     @Column(name = "acc_id")
@@ -32,12 +40,15 @@ public class Payment {
     private BigDecimal amount;
 
     @Column(name = "execution_start")
+    @ApiModelProperty(hidden = true)
     private Timestamp executionStart;
 
     @Column(name = "execution_end")
+    @ApiModelProperty(hidden = true)
     private Timestamp executionEnd;
 
     @Column(name = "execution_status")
+    @ApiModelProperty(hidden = true)
     private String executionStatus;
 
     public Payment() {

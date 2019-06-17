@@ -1,7 +1,6 @@
 package com.andersenlab.payment.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +11,10 @@ import com.andersenlab.payment.service.PaymentPersistenceService;
 import com.andersenlab.payment.service.PaymentService;
 import com.andersenlab.payment.service.StatisticsService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@Api(tags = { "payment" })
 @RestController
 @RequestMapping("/api/rest/payment")
 public class PaymentController {
@@ -23,9 +26,10 @@ public class PaymentController {
     @Autowired
     PaymentPersistenceService paymentPersistenceService;
 
-    @PostMapping("/{accountId}")
-    public void transfer(@PathVariable Long accountId, @RequestBody Payment payment) {
-        payment.setAccountId(accountId);
+    @ApiOperation(value = "Execute payment from specified account",
+                  notes = "Takes Payment object and executes it")
+    @PostMapping
+    public void transfer(@RequestBody Payment payment) {
         Payment executed = paymentService.execute(payment);
         paymentPersistenceService.save(executed);
         statisticsService.sendReport(executed);
